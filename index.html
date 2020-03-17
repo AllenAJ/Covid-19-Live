@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="https://cdn3.iconfinder.com/data/icons/science-114/64/virus-lab-scientist-biology-cell-medical-512.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Covid-19 Updates LIVE!</title>
+    <meta name="author" content="Allen Joseph AJ">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/slw1mnm.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style>
+        body {
+            font-family: Europa, Avenir Next, Montserrat, Fredoka One;
+            background-color: #f9f9f9;
+        }
+
+        #grad {
+            width: 400px;
+            border-radius: 5px;
+            text-align: left;
+            background-color: #fff;
+            margin: 15px auto;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #grad:hover {
+            transform: scale(1.05);
+            transition: 0.5s;
+        }
+
+        #header {
+            text-align: center;
+        }
+
+        #thanks {
+            text-align: center;
+        }
+
+        #footer #footer-text {
+            text-align: center;
+            color: #272727;
+            font-size: 15px;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h2 id="header"><i class="fa fa-heartbeat"></i> Covid-19 India Live Updates!</h2>
+        <table id="grad" class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Total Cases</th>
+                    <th>Indians</th>
+                    <th>Foreigners</th>
+                    <th>Deaths</th>
+                    <th>Cured</th>
+                </tr>
+            </thead>
+            <tbody id="datahandler1"></tbody>
+        </table>
+        <table id="grad" class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Cases</th>
+                    <th>Deaths</th>
+                    <th>Cured</th>
+                </tr>
+            </thead>
+            <tbody id="datahandler2"></tbody>
+        </table>
+        <script>
+            $(document).ready(function() {
+                $.getJSON(
+                    "https://api.rootnet.in/covid19-in/stats/latest",
+                    null,
+                    function(data) {
+                        Obj = data.data.summary;
+                        console.log(data.data.regional);
+                        mainObj = data.data.regional.sort(function(a, b) {
+                            return (b.confirmedCasesIndian + b.confirmedCasesForeign -
+                                (a.confirmedCasesIndian + a.confirmedCasesForeign)
+                            );
+                        });
+                        var k = "<tbody>";
+                        for (i = 0; i < mainObj.length; i++) {
+                            k += "<tr>";
+                            k += "<td>" + mainObj[i].loc + "</td>";
+                            k +=
+                                "<td>" +
+                                (mainObj[i].confirmedCasesIndian +
+                                    mainObj[i].confirmedCasesForeign) +
+                                "</td>";
+                            k += "<td>" + mainObj[i].deaths + "</td>";
+                            k += "<td>" + mainObj[i].discharged + "</td>";
+                            k += "</tr>";
+                        }
+                        k += "</tbody>";
+                        document.getElementById("datahandler2").innerHTML = k;
+                        var j = "<tbody>";
+                        j += "<tr>";
+                        j += "<td>" + Obj.total + "</td>";
+                        j += "<td>" + Obj.confirmedCasesIndian + "</td>";
+                        j += "<td>" + Obj.confirmedCasesForeign + "</td>";
+                        j += "<td>" + Obj.deaths + "</td>";
+                        j += "<td>" + Obj.discharged + "</td>";
+                        j += "</tr>";
+                        j += "</tbody>";
+                        document.getElementById("datahandler1").innerHTML = j;
+                        console.log(Obj);
+                    }
+                );
+            });
+        </script>
+    </div>
+    <div id="footer">
+        <p id="footer-text"><i class="fas fa-code"></i> with <i class="fas fa-heart"></i> by <span>Allen Joseph AJ</span> © 2020</p>
+    </div>
+</body>
+
+</html>
